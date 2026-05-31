@@ -1,5 +1,6 @@
 # env settings
-env
+.env
 
 # virtualenv
 venv
+__pycache__

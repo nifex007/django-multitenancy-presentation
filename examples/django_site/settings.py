@@ -6,7 +6,6 @@ from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = Path(__file__).parent.parent
 
-
 class _NOT_PROVIDED:
     pass
 

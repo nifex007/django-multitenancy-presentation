@@ -1,0 +1,23 @@
+# docker-compose.yml
+
+services:
+  db:
+    image: postgres:16
+    container_name: django_multitenancy_presentation_db
+
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: django_multitenancy_presentation
+      POSTGRES_USER: django_multitenancy_app
+      POSTGRES_HOST_AUTH_METHOD: trust
+
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - django_multitenancy_presentation_db_data:/var/lib/postgresql/data
+
+volumes:
+  django_multitenancy_presentation_db_data:
