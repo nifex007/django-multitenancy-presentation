@@ -7,9 +7,9 @@
 	<table class="data">
 		<thead>
 			<th>Account</th>
-			<th>Project</th>
-			<th>Task</th>
-			<th>Subtask</th>
+			<th>Property</th>
+			<th>Building</th>
+			<th>Unit</th>
 			<th>Name</th>
 			<th>Complete?</th>
 			<th>Details</th>
@@ -17,9 +17,9 @@
 		<tbody>
 			{% for obj in object_list %}
 				<tr>
-					<td>{{ obj.task.project.account }}</td>
-					<td>{{ obj.task.project }}</td>
-					<td>{{ obj.task }}</td>
+					<td>{{ obj.building.project.account }}</td>
+					<td>{{ obj.building.project }}</td>
+					<td>{{ obj.building }}</td>
 					<td>{{ obj.id }}</td>
 					<td>{{ obj.name }}</td>
 					<td>{{ obj.is_complete | yesno:"✅,❌" }}</td>

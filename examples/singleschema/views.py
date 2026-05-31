@@ -8,5 +8,5 @@ class FilterTenantMixin:
         return qs.filter_current_tenant()
 
 
-class SubtaskListView(FilterTenantMixin, BaseSubtaskListView):
+class UnitListView(FilterTenantMixin, BaseSubtaskListView):
     pass

@@ -10,9 +10,9 @@ models = importlib.import_module(settings.MODELS_MODULE + ".models")
 
 
 class BaseSubtaskListView(ListView):
-    model = models.Subtask
+    model = models.Unit
     ordering = ["name"]
-    template_name = "views/subtask_list.html"
+    template_name = "views/unit_list.html"
 
     paginate_by = 10
 
@@ -21,7 +21,7 @@ class BaseSubtaskListView(ListView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.select_related("task", "task__project", "task__project__account")
+        return qs.select_related("building", "building__property", "building__property__account")
 
     def get_context_data(self, *, object_list=None, **kwargs):
         data = super().get_context_data(object_list=object_list, **kwargs)

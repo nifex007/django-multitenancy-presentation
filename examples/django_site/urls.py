@@ -8,7 +8,7 @@ from django.views.generic import RedirectView
 views = importlib.import_module(settings.MODELS_MODULE + ".views")
 
 urlpatterns = [
-    path("", RedirectView.as_view(url=reverse_lazy("subtasks")), name="homepage"),
-    path("subtasks/", views.SubtaskListView.as_view(), name="subtasks"),
-    path("subtasks/<int:page>/", views.SubtaskListView.as_view(), name="subtasks_page"),
+    path("", RedirectView.as_view(url=reverse_lazy("units")), name="homepage"),
+    path("units/", views.UnitListView.as_view(), name="units"),
+    path("units/<int:page>/", views.UnitListView.as_view(), name="units_page"),
 ]
