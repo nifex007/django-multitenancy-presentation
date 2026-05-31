@@ -17,13 +17,12 @@
 		<tbody>
 			{% for obj in object_list %}
 				<tr>
-					<td>{{ obj.building.project.account }}</td>
-					<td>{{ obj.building.project }}</td>
+					<td>{{ obj.building.project.account.id }}</td>
+					<td>{{ obj.building.project.name }}</td>
 					<td>{{ obj.building }}</td>
 					<td>{{ obj.id }}</td>
 					<td>{{ obj.name }}</td>
-					<td>{{ obj.is_complete | yesno:"✅,❌" }}</td>
-					<td>{{ obj.details }}</td>
+					<td>{{ obj.building.has_units | yesno:"✅,❌" }}</td>
 				</tr>
 			{% empty %}
 				<tr>

@@ -45,7 +45,7 @@ class User(AbstractUser):
         return f"User #{self.id}" if self.id else "New User"
 
 
-class Project(Model):
+class Property(Model):
     id = AutoField(primary_key=True)
     # account -- FK
     name = CharField(max_length=255)
@@ -55,32 +55,31 @@ class Project(Model):
         abstract = True
 
     def __str__(self):
-        return f"Project #{self.id}" if self.id else "New Project"
+        return f"Property #{self.id}" if self.id else "New Property"
 
 
-class Task(Model):
+class Building(Model):
     id = AutoField(primary_key=True)
-    # project -- FK
+    # property -- FK
     name = CharField(max_length=255)
-    is_complete = BooleanField(default=False)
+    has_units = BooleanField(default=False)
     details = TextField(blank=True, default="")
 
     class Meta:
         abstract = True
 
     def __str__(self):
-        return f"Task #{self.id}" if self.id else "New Task"
+        return f"Building #{self.id}" if self.id else "New Building"
 
 
-class Subtask(Model):
+class Unit(Model):
     id = AutoField(primary_key=True)
-    # task -- FK
+    # building -- FK
     name = CharField(max_length=255)
-    is_complete = BooleanField(default=False)
     details = TextField(blank=True, default="")
 
     class Meta:
         abstract = True
 
     def __str__(self):
-        return f"Subtask #{self.id}" if self.id else "New Subtask"
+        return f"Unit #{self.id}" if self.id else "New Unit"

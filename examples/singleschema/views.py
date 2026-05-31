@@ -1,4 +1,4 @@
-from common.views import BaseSubtaskListView
+from common.views import BaseUnitListView
 from singleschema.middleware import current_tenant_id
 
 
@@ -8,5 +8,5 @@ class FilterTenantMixin:
         return qs.filter_current_tenant()
 
 
-class UnitListView(FilterTenantMixin, BaseSubtaskListView):
+class UnitListView(FilterTenantMixin, BaseUnitListView):
     pass

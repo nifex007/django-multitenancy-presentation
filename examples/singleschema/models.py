@@ -23,7 +23,7 @@ class User(common_models.User):
         base_manager_name = "all_tenants"
 
 
-class Property(common_models.Project):
+class Property(common_models.Property):
     account = ForeignKey(Account, on_delete=RESTRICT)
 
     objects = TenantedManager(require_tenant=True)
@@ -33,7 +33,7 @@ class Property(common_models.Project):
         base_manager_name = "all_tenants"
 
 
-class Building(common_models.Task):
+class Building(common_models.Building):
     account = ForeignKey(Account, on_delete=RESTRICT)
     property = ForeignKey(Property, on_delete=RESTRICT)
 
@@ -44,7 +44,7 @@ class Building(common_models.Task):
         base_manager_name = "all_tenants"
 
 
-class Unit(common_models.Subtask):
+class Unit(common_models.Unit):
     account = ForeignKey(Account, on_delete=RESTRICT)
     building = ForeignKey(Building, on_delete=RESTRICT)
 

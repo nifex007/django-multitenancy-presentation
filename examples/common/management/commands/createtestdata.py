@@ -9,9 +9,9 @@ from factory.random import reseed_random
 
 from ...factories import AccountFactory
 from ...factories import UserFactory
-from ...factories import ProjectFactory
-from ...factories import TaskFactory
-from ...factories import SubtaskFactory
+from ...factories import BuildingFactory
+from ...factories import PropertyFactory
+from ...factories import UnitFactory
 
 models = importlib.import_module(settings.MODELS_MODULE + ".models")
 
@@ -51,48 +51,54 @@ class Command(BaseCommand):
         )
 
         parser.add_argument(
-            "--min-projects",
+            "--min-properties",
+            dest="min_properties",
             action="store",
             type=int,
             default=1,
-            help="Min average number of projects to create per account",
+            help="Min average number of properties to create per account",
         )
         parser.add_argument(
-            "--max-projects",
+            "--max-properties",
+            dest="max_properties",
             action="store",
             type=int,
             default=30,
-            help="Max number of projects to create per account",
+            help="Max number of properties to create per account",
         )
 
         parser.add_argument(
-            "--min-tasks",
+            "--min-buildings",
+            dest="min_buildings",
             action="store",
             type=int,
             default=1,
-            help="Min average number of tasks to create per project",
+            help="Min average number of buildings to create per property",
         )
         parser.add_argument(
-            "--max-tasks",
+            "--max-buildings",
+            dest="max_buildings",
             action="store",
             type=int,
             default=10,
-            help="Max average number of tasks to create per project",
+            help="Max average number of buildings to create per property",
         )
 
         parser.add_argument(
-            "--min-subtasks",
+            "--min-units",
+            dest="min_units",
             action="store",
             type=int,
             default=1,
-            help="Min average number of subtasks to create per task",
+            help="Min average number of units to create per building",
         )
         parser.add_argument(
-            "--max-subtasks",
+            "--max-units",
+            dest="max_units",
             action="store",
             type=int,
             default=10,
-            help="Max average number of subtasks to create per task",
+            help="Max average number of units to create per building",
         )
 
         parser.add_argument(
@@ -105,12 +111,12 @@ class Command(BaseCommand):
         accounts: int,
         min_users: int,
         max_users: int,
-        min_projects: int,
-        max_projects: int,
-        min_tasks: int,
-        max_tasks: int,
-        min_subtasks: int,
-        max_subtasks: int,
+        min_properties: int,
+        max_properties: int,
+        min_buildings: int,
+        max_buildings: int,
+        min_units: int,
+        max_units: int,
         rollback: bool,
         **options,
     ):
@@ -119,16 +125,18 @@ class Command(BaseCommand):
 
         accounts_count = 0
         users_count = 0
-        projects_count = 0
-        tasks_count = 0
-        subtasks_count = 0
+        properties_count = 0
+        buildings_count = 0
+        units_count = 0
 
         if "multidb" in settings.INSTALLED_APPS:
             assert accounts <= settings.MULTIDB_COUNT
             from multidb.middleware import MultiDbMiddleware
+
             account_context = MultiDbMiddleware.use_current_tenancy_slug
-        elif "singleschema":
+        elif "singleschema" in settings.INSTALLED_APPS:
             from singleschema.middleware import SingleSchemaMiddleware
+
             account_context = SingleSchemaMiddleware.use_current_tenancy_slug
         else:
             raise RuntimeError("Unrecognised configuration")
@@ -146,25 +154,25 @@ class Command(BaseCommand):
                     users = UserFactory.create_batch(n_users, account=account, password="password")
                     users_count += len(users)
 
-                    n_projects = FuzzyInteger(min_projects, max_projects).fuzz()
-                    projects = ProjectFactory.create_batch(n_projects, account=account)
-                    projects_count += len(projects)
+                    n_properties = FuzzyInteger(min_properties, max_properties).fuzz()
+                    properties = PropertyFactory.create_batch(n_properties, account=account)
+                    properties_count += len(properties)
 
-                    n_tasks = FuzzyInteger(min_tasks, max_tasks).fuzz() * len(projects)
-                    tasks = TaskFactory.create_batch(
-                        n_tasks,
-                        project=projects,
-                        **{"account": account} if hasattr(models.Task, "account") else {},
+                    n_buildings = FuzzyInteger(min_buildings, max_buildings).fuzz() * len(properties)
+                    buildings = BuildingFactory.create_batch(
+                        n_buildings,
+                        property=properties,
+                        account=account,
                     )
-                    tasks_count += len(tasks)
+                    buildings_count += len(buildings)
 
-                    n_subtasks = FuzzyInteger(min_subtasks, max_subtasks).fuzz() * len(tasks)
-                    subtasks = SubtaskFactory.create_batch(
-                        n_subtasks,
-                        task=tasks,
-                        **{"account": account} if hasattr(models.Subtask, "account") else {},
+                    n_units = FuzzyInteger(min_units, max_units).fuzz() * len(buildings)
+                    units = UnitFactory.create_batch(
+                        n_units,
+                        building=buildings,
+                        account=account,
                     )
-                    subtasks_count += len(subtasks)
+                    units_count += len(units)
 
                     if accounts > 10:
                         print(".", end="", flush=True)
@@ -177,6 +185,6 @@ class Command(BaseCommand):
         print()
         print(f"Accounts: {accounts_count}")
         print(f"Users: {users_count}")
-        print(f"Projects: {projects_count}")
-        print(f"Tasks: {tasks_count}")
-        print(f"Subtasks: {subtasks_count}")
+        print(f"Properties: {properties_count}")
+        print(f"Buildings: {buildings_count}")
+        print(f"Units: {units_count}")

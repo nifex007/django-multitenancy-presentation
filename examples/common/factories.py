@@ -51,30 +51,29 @@ class UserFactory(DjangoModelFactory):
         model = models.User
 
 
-class ProjectFactory(DjangoModelFactory):
+class PropertyFactory(DjangoModelFactory):
     account = Transformer(None, transform=select_random)
-    name = LazyAttributeSequence(lambda obj, n: f"project-{n}")
+    name = LazyAttributeSequence(lambda obj, n: f"property-{n}")
     details = Faker("paragraph")
 
     class Meta:
-        model = models.Project
+        model = models.Property
 
 
-class TaskFactory(DjangoModelFactory):
-    project = Transformer(None, transform=select_random)
+class BuildingFactory(DjangoModelFactory):
+    property = Transformer(None, transform=select_random)
     name = Faker("text", max_nb_chars=200)
-    is_complete = FuzzyChoice([True, False])
+    has_units = True
     details = Faker("paragraph")
 
     class Meta:
-        model = models.Task
+        model = models.Building
 
 
-class SubtaskFactory(DjangoModelFactory):
-    task = Transformer(None, transform=select_random)
+class UnitFactory(DjangoModelFactory):
+    building = Transformer(None, transform=select_random)
     name = Faker("text", max_nb_chars=200)
-    is_complete = FuzzyChoice([True, False])
     details = Faker("paragraph")
 
     class Meta:
-        model = models.Subtask
+        model = models.Unit

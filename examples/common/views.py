@@ -9,7 +9,7 @@ from django.views.generic import ListView
 models = importlib.import_module(settings.MODELS_MODULE + ".models")
 
 
-class BaseSubtaskListView(ListView):
+class BaseUnitListView(ListView):
     model = models.Unit
     ordering = ["name"]
     template_name = "views/unit_list.html"
@@ -33,7 +33,7 @@ class BaseSubtaskListView(ListView):
             num_pages = data["page_obj"].paginator.num_pages
             page_numbers = range(max(1, page - self.link_count // 2), min(num_pages, page + self.link_count // 2))
             data["page_links"] = {
-                n: reverse("subtasks_page", kwargs={"page": n}) if n != 1 else reverse("subtasks")
+                n: reverse("units_page", kwargs={"page": n}) if n != 1 else reverse("units")
                 for n in page_numbers
             }
 
